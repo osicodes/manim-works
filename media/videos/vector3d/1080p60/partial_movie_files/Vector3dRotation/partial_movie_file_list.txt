@@ -1,0 +1,6 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/MECT1/Documents/python/media/videos/vector3d/1080p60/partial_movie_files/Vector3dRotation/462517863_4229416500_223132457.mp4'
+file 'file:C:/Users/MECT1/Documents/python/media/videos/vector3d/1080p60/partial_movie_files/Vector3dRotation/1374237520_698827957_2227952199.mp4'
+file 'file:C:/Users/MECT1/Documents/python/media/videos/vector3d/1080p60/partial_movie_files/Vector3dRotation/2522736272_3494816192_3278402516.mp4'
+file 'file:C:/Users/MECT1/Documents/python/media/videos/vector3d/1080p60/partial_movie_files/Vector3dRotation/2522736272_1751830219_2012701748.mp4'
+file 'file:C:/Users/MECT1/Documents/python/media/videos/vector3d/1080p60/partial_movie_files/Vector3dRotation/2522736272_3687956762_3759727323.mp4'
