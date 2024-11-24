@@ -54,12 +54,23 @@ class Vector3dRotation(ThreeDScene):
             y_length=12,
             z_length=12,
         )
-        
-        mycurve = CurvedArrow([1, 2, 3],[-1, -2, 3])
-        mydot = Dot3D([1, 2, 3],color=RED_A)
-        myvec = Vector(direction=[1, 2, 3])
+
+        # Define a parametric curve for the arrow's path
+        def parametric_curve(t):
+            # Parametric function that creates a curve
+            return np.array([np.cos(t), np.sin(t), 3])
+
+        # Create the curve using ParametricFunction
+        mycurve = ParametricFunction(
+            parametric_curve,
+            t_range=np.array([0, 3*PI/2, PI/180]),  # Parameter range for the curve
+            color=BLUE,
+            stroke_width=4,
+        )
+        mydot = Dot3D([1, 0, 3],color=RED_A)
+        myvec = Vector(direction=[1, 0, 3])
         # self.add(axes,myvec,mydot,mycurve)
-        self.play(Create(VGroup(axes,myvec,mydot,mycurve)))
+        self.play(Create(VGroup(axes,myvec,mydot)))
         self.move_camera(60*DEGREES,-45*DEGREES)
         self.wait(2)
         self.play(
@@ -71,14 +82,83 @@ class Vector3dRotation(ThreeDScene):
                 mydot, 
                 angle=3*PI/2,
                 about_point=[0,0,1]
-            )],
-            subcaption_duration=5
+            ),Create(mycurve)],
+            run_time=5
         )
         self.wait(3)
 
+        # curve = ParametricFunction(
+        #     lambda u: ( 1.2 * np.cos(u), np.sin(u), u * 0.05 ), 
+        #     color=RED, 
+        #     t_range = (-3*TAU, 5*TAU, 0.01) 
+        # )
+        # self.add(curve)
+        
+        
+        
+class CurvedArrow3DScene(ThreeDScene):
+    def construct(self):
+        # Set up the 3D camera
+        self.set_camera_orientation(phi=75 * DEGREES, theta=45 * DEGREES)
+
+        # Define start and end points in 3D
+        start_point = [1, 2, 3]
+        end_point = [-1, -2, 3]
+
+        # Create a 3D curved arrow using a bezier curve and an arrowhead
+        curve = CubicBezier(
+            start_point,
+            [1, 3, 4],  # Control point 1 for the curve
+            [-1, -3, 4],  # Control point 2 for the curve
+            end_point,
+            color=BLUE,
+        )
+        # arrow_head = Arrow(end_point - 0.3 * normalize(end_point - start_point), end_point, color=BLUE)
+
+        # Group the curve and arrowhead together
+        # curved_arrow = VGroup(curve, arrow_head)
+
+        # Add the curved arrow to the scene
+        # self.add(curved_arrow)
+        self.play(Create(curve))
+        self.wait(2)
+        
+
+
+class Curved2Arrow3DScene(ThreeDScene):
+    def construct(self):
+        # Set up the 3D camera
+        self.set_camera_orientation(phi=75 * DEGREES, theta=45 * DEGREES)
+
+        # Define start and end points
+        start_point = np.array([1, 2, 3])
+        end_point = np.array([-1, -2, 3])
+
+        # Define a parametric curve for the arrow's path
+        def parametric_curve(t):
+            # Parametric function that creates a curve
+            return (1 - t) * start_point + t * end_point + np.array([0, 0, 2 * np.sin(PI * t)])
+
+        # Create the curve using ParametricFunction
         curve = ParametricFunction(
-            lambda u: ( 1.2 * np.cos(u), np.sin(u), u * 0.05 ), 
-            color=RED, 
-            t_range = (-3*TAU, 5*TAU, 0.01) 
-        ).set_shade_in_3d(True)
-        self.add(curve)
+            parametric_curve,
+            t_range=np.array([0, 1]),  # Parameter range for the curve
+            color=BLUE,
+            stroke_width=4,
+        )
+
+        # Create the arrowhead at the end of the curve
+        arrow_head = Arrow(
+            start=parametric_curve(0.95),  # A point slightly before the end
+            end=parametric_curve(1),
+            buff=0,
+            color=BLUE,
+        )
+
+        # Group the curve and arrowhead together
+        curved_arrow = VGroup(curve, arrow_head)
+
+        # Add the curved arrow to the scene
+        self.play(Create(curved_arrow))
+        self.wait(2)
+

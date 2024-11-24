@@ -1,8 +1,3 @@
 {
-    "python.autoComplete.extraPaths": [],
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#003524",
-        "titleBar.activeBackground": "#004A33",
-        "titleBar.activeForeground": "#E8FFF8"
-    }
+    "python.autoComplete.extraPaths": []
 }
