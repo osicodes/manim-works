@@ -17,22 +17,25 @@ class VectorInSpace(ThreeDScene):
 
         point = Dot3D([4, 2, 5], color=RED).scale(2)
         originPoint = Dot3D([0, 0, 0], color=DARK_BLUE).scale(2)
-        vectorP = Vector(direction=[4, 2, 5])
+        vectorP = Arrow(
+            [0, 0, 0], [4, 2, 5],
+            color=GOLD, tip_shape=StealthTip, buff=0.3
+        )  # Vector(direction=[4, 2, 5])
         p = Tex("P")
         self.add_fixed_orientation_mobjects(p)
         p.next_to(point, RIGHT, buff=0.2)
 
-        '''loc = SVGMobject(
-            "assets\images\pin.svg", 
-            fill_color=GREEN,
-            stroke_color=GREEN,
-            ).shift([4, 2, 5.5]).scale(0.2)#.rotate(PI/2, axis=RIGHT)'''
+        # loc = SVGMobject(
+        #     "assets\images\pin.svg",
+        #     fill_color=GREEN,
+        #     stroke_color=GREEN,
+        #     ).shift([4, 2, 5.5]).scale(0.2)#.rotate(PI/2, axis=RIGHT)
         # self.add_fixed_orientation_mobjects(loc)
 
         self.play(FadeIn(point))
-        self.wait(1)
-        self.play(Write(VGroup(axes, labels)))
-        self.wait(1)
+        self.wait(2)
+        self.play(Write(VGroup(axes, labels)), run_time=2)
+        self.wait(2)
         '''self.play(Transform(p,loc))
         self.wait(1)'''
         l = Line(originPoint, point, color=YELLOW)
@@ -62,7 +65,7 @@ class VectorInSpace(ThreeDScene):
         self.play(Create(VGroup(pointXLine, pointYLine,
                                 pointZLine, labelx, labely, labelz)))
 
-        self.wait(2)
+        self.wait(3)
 
         vectorX = Arrow(
             [4, 0, 0], [4, 2, 0],
@@ -76,67 +79,112 @@ class VectorInSpace(ThreeDScene):
             [4, 2, 0], [4, 2, 5],
             color=GREEN,
         )
-        self.play(Create(VGroup(vectorX, vectorY, vectorZ)))
+        self.play(Create(VGroup(vectorX, vectorY, vectorZ)), run_time=4)
 
-        self.wait(2)
+        self.wait(3)
 
+        # Point P and cordinates
         pointP = Tex("P")
         self.add_fixed_in_frame_mobjects(pointP)
         pointP.to_corner(UL)
 
         self.begin_ambient_camera_rotation()
-        self.play(Write(pointP))
+        self.play(Write(pointP), run_time=2)
 
-        
-        coordP = MathTex("(", "a_x, ", "b_y, ", "a_x", ")")
+        coordP = MathTex("(", "a_x, ", "b_y, ", "c_z", ")")
         coordP[1].set_color(BLUE)
         coordP[2].set_color(RED)
         coordP[3].set_color(GREEN)
-        
+
         self.add_fixed_in_frame_mobjects(coordP)
-        coordP.next_to(pointP)#.arrange(RIGHT)
+        coordP.next_to(pointP)
         self.play(Write(coordP))
 
-        self.wait(2)
+        self.wait(4)
 
         self.play(FadeOut(l))
+        self.wait(2)
+
+        self.play(Create(vectorP), run_time=3)
         self.wait(1)
 
-        self.play(Create(vectorP))
-        self.wait(1)
-
-        p2 = pointP.copy()
+        # p2 = pointP.copy()
+        p2 = MathTex(r"\overrightarrow{P}")
         self.add_fixed_in_frame_mobjects(p2)
-        self.play(ApplyMethod(p2.next_to, pointP, DOWN))
+        p2.next_to(pointP, DOWN * 4)
+        self.play(TransformFromCopy(pointP,p2))
 
         equal = Tex("=")
-        
-        m1 = MathTex(r"\begin{bmatrix} a_x \\ b_y \\ c_z \end{bmatrix}")
+
+        m1 = MathTex(r"\begin{bmatrix} a_x \\ b_y \\ c_z \end{bmatrix}")[0]
+        m1[2:4].set_color(BLUE)
+        m1[4:6].set_color(RED)
+        m1[6:8].set_color(GREEN)
+
         self.add_fixed_in_frame_mobjects(VGroup(equal, m1))
-        equal.next_to( p2, RIGHT)
-        m1.next_to(equal, RIGHT + DOWN * 0.003) 
+        equal.next_to(p2, RIGHT)
+        m1.next_to(equal, RIGHT)
         self.play(Write(VGroup(equal, m1)))
-        self.wait(2)
-        
-        px=MathTex("P_x", color=BLUE)
-        py=MathTex("P_y", color=RED)
-        pz=MathTex("P_z", color=GREEN)
-        w=MathTex("w", color=YELLOW)
-        
+        self.wait(5)
+
+        px = MathTex("P_x", color=BLUE)[0]
+        py = MathTex("P_y", color=RED)[0]
+        pz = MathTex("P_z", color=GREEN)[0]
+        w = MathTex("w", color=YELLOW)[0]
+        self.add_fixed_in_frame_mobjects(VGroup(px, py, pz, w))
+
         m2 = MobjectMatrix([[px], [py], [pz], [w]])
         self.add_fixed_in_frame_mobjects(m2)
         m2.next_to(p2, DOWN * 8 + RIGHT * 0.003)
-        self.play(TransformFromCopy(m1, m2))
-        # self.play(ApplyMethod(p2.shift, [4, 2, 3]))
-        # self.play(ApplyMethod(p2.next_to, axes))
+        self.play(Write(m2), run_time=3)
 
-        self.wait(2)
-        
         self.play(FadeOut(VGroup(axes, p, vectorP, vectorX, vectorY, vectorZ,pointXLine, pointYLine,
                                 pointZLine, labelx, labely, labelz, labels, point, originPoint)))
+        self.wait(1)
+
+        m2x = px[0:2].copy()
+        m2y = py[0:2].copy()
+        m2z = pz[0:2].copy()
+        m2w = w[0:2].copy()
+
+        self.add_fixed_in_frame_mobjects(VGroup(m2x, m2y, m2z, m2w))
+
+        axcopy = coordP[1].copy()
+        bycopy = coordP[2].copy()
+        czcopy = coordP[3].copy()
+
+        axfrac = MathTex(r"\frac{p_x}{w}")[0]
+        byfrac = MathTex(r"\frac{p_y}{w}")[0]
+        czfrac = MathTex(r"\frac{p_z}{w}")[0]
+
+        axfrac[0:2].set_color(BLUE)
+        axfrac[3].set_color(YELLOW)
+        byfrac[0:2].set_color(RED)
+        byfrac[3].set_color(YELLOW)
+        czfrac[0:2].set_color(GREEN)
+        czfrac[3].set_color(YELLOW)
+
+        result = VGroup(axfrac, equal.copy(), axcopy, byfrac,
+                        equal.copy(), bycopy, czfrac, equal.copy(), czcopy)
+        self.add_fixed_in_frame_mobjects(result)
+        result.arrange(RIGHT).next_to(m2, RIGHT * 2)
+
+        self.play(Write(result), run_time=3)
         self.wait(2)
-        pxcopy = m2[0].copy()
-        pycopy = m2[1].copy()
-        pzcopy = m2[2].copy()
-        wcopy = m2[3].copy()
+        
+        # Curved arrow        
+        points = [
+            axcopy.get_top(),
+            bycopy.get_top(),
+            czcopy.get_top(),
+            coordP.get_right()
+        ]
+        
+        carrows = VGroup(
+            CurvedArrow(points[0], points[3], color=RED, tip_shape=StealthTip),
+            CurvedArrow(points[1], points[3], color=RED, tip_shape=StealthTip),
+            CurvedArrow(points[2], points[3], color=RED, tip_shape=StealthTip)
+        )
+        self.add_fixed_in_frame_mobjects(carrows)
+        self.play(Create(carrows))
         self.wait(2)

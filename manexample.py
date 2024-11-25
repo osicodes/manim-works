@@ -22,6 +22,17 @@ class Formula(Scene):
         # self.add_fixed_in_frame_mobjects(coordP)
         coordP.next_to(t)#.arrange(RIGHT)
         self.play(Write(coordP))
+        self.wait(1)
+        
+        t1 = MathTex('{{ a }} + {{ b }} = {{ c }}') 
+        mathFrac = MathTex(r"\frac{1}{a+b\sqrt{2}}")[0]
+        t1.next_to(t, DOWN)
+        mathFrac.next_to(t1, DOWN)
+        self.play(Write(t1),Write(mathFrac))
+        self.wait(1)
+        
+        p2 = mathFrac[3:].copy()
+        self.play(ApplyMethod(p2.next_to, mathFrac, RIGHT))
         self.wait(3)
 
 class CurvedArrowScene(Scene):
