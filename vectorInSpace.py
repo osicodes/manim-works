@@ -40,7 +40,7 @@ class VectorInSpace(ThreeDScene):
         self.wait(1)'''
         l = Line(originPoint, point, color=YELLOW)
         self.add(VGroup(originPoint, l))
-        self.wait(1)
+        self.wait(2)
 
         pointXLine = DashedLine([4, 0, 0], [4, 2, 0], color=GRAY)
         pointYLine = DashedLine([0, 2, 0], [4, 2, 0], color=GRAY)
@@ -63,7 +63,7 @@ class VectorInSpace(ThreeDScene):
         labelz.next_to(pointZLine, RIGHT)
 
         self.play(Create(VGroup(pointXLine, pointYLine,
-                                pointZLine, labelx, labely, labelz)))
+                                pointZLine, labelx, labely, labelz)),run_time=2)
 
         self.wait(3)
 
@@ -86,7 +86,7 @@ class VectorInSpace(ThreeDScene):
         # Point P and cordinates
         pointP = Tex("P")
         self.add_fixed_in_frame_mobjects(pointP)
-        pointP.to_corner(UL)
+        pointP.shift(np.array((-4, 3, 0.0)))
 
         self.begin_ambient_camera_rotation()
         self.play(Write(pointP), run_time=2)
@@ -100,10 +100,10 @@ class VectorInSpace(ThreeDScene):
         coordP.next_to(pointP)
         self.play(Write(coordP))
 
-        self.wait(4)
+        self.wait(2)
 
         self.play(FadeOut(l))
-        self.wait(2)
+        self.wait(1)
 
         self.play(Create(vectorP), run_time=3)
         self.wait(1)
@@ -135,7 +135,7 @@ class VectorInSpace(ThreeDScene):
 
         m2 = MobjectMatrix([[px], [py], [pz], [w]])
         self.add_fixed_in_frame_mobjects(m2)
-        m2.next_to(p2, DOWN * 8 + RIGHT * 0.003)
+        m2.next_to(p2, DOWN * 6)
         self.play(Write(m2), run_time=3)
 
         self.play(FadeOut(VGroup(axes, p, vectorP, vectorX, vectorY, vectorZ,pointXLine, pointYLine,
@@ -169,8 +169,8 @@ class VectorInSpace(ThreeDScene):
         self.add_fixed_in_frame_mobjects(result)
         result.arrange(RIGHT).next_to(m2, RIGHT * 2)
 
-        self.play(Write(result), run_time=3)
-        self.wait(2)
+        self.play(Write(result), run_time=5)
+        self.wait(4)
         
         # Curved arrow        
         points = [
@@ -186,5 +186,5 @@ class VectorInSpace(ThreeDScene):
             CurvedArrow(points[2], points[3], color=RED, tip_shape=StealthTip)
         )
         self.add_fixed_in_frame_mobjects(carrows)
-        self.play(Create(carrows))
+        self.play(Create(carrows), run_time=2)
         self.wait(2)
